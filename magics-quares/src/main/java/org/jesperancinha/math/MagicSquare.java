@@ -1,52 +1,147 @@
 package org.jesperancinha.math;
 
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+import org.jesperancinha.math.exception.NotMagicNumberException;
 
+import java.io.PrintStream;
 import java.util.Arrays;
 
-@Data
-@Builder
+@Slf4j
 public class MagicSquare {
 
-    @NonNull
-    private final int[][] square;
+    private final long[][] square;
 
-    public MagicSquare(int [][] square){
-        this.square = square;
-        validate(square);
+    private final int dim;
+
+    public MagicSquare(int dim) {
+        this.dim = dim;
+        this.square = new long[dim][dim];
     }
 
-    private void validate(int[][] square) throws NotMagicNumberException {
-        int sumRowOne = sum(getRowByIndex(0));
-        for(int i = 1; i < square.length; i++){
-            if(sum(getRowByIndex(i)) != sumRowOne){
-                throw NotMagicNumberException.createByRow(i);
-            }
-        }
+    public MagicSquare(long[][] square) {
+        this.dim = square.length;
+        this.square = square;
+        validate();
+    }
+
+    public void setCoordValue(int x, int y, long value) {
+        this.square[y][x] = value;
+    }
+
+    public long getCoordValue(int x, int y) {
+        return this.square[y][x];
+    }
+
+    private void validate() throws NotMagicNumberException {
+        long sumRowOne = sum(getRowByIndex(0));
+        checkRows(sumRowOne);
+        checkColumns(sumRowOne);
+    }
+
+    private void checkColumns(long sumRowOne) {
         for (int j = 0; j < square.length; j++) {
-            if(sum(getColumnByIndex(j)) != sumRowOne){
+            if (sum(getColumnByIndex(j)) != sumRowOne) {
                 throw NotMagicNumberException.createByColumn(j);
             }
         }
     }
 
-    private int sum(int[] arrayInt) {
+    private void checkRows(long sumRowOne) {
+        for (int i = 1; i < square.length; i++) {
+            if (sum(getRowByIndex(i)) != sumRowOne) {
+                throw NotMagicNumberException.createByRow(i);
+            }
+        }
+    }
+
+    private long sum(long[] arrayInt) {
         return Arrays.stream(arrayInt).sum();
     }
 
-    public int[] getRowByIndex(int index) {
+    private long[] getRowByIndex(int index) {
         return square[index];
     }
 
-    public int[] getColumnByIndex(int index) {
+    private long[] getColumnByIndex(int index) {
 
-        int[] columns = new int[square.length];
+        long[] columns = new long[square.length];
         for (int i = 0; i < square.length; i++) {
             columns[i] = square[i][index];
         }
         return columns;
+    }
+
+    public void fillGaps(int startX, int startY) {
+            var nextX = startX + 1;
+            var nextY = startY - 1;
+
+            var currentValue = getCoordValue(startX, startY);
+            var nextValue = currentValue + 1;
+
+            if (insideSquare(nextX, nextY)) {
+                if (getCoordValue(nextX, nextY) == 0) {
+                    setCoordValue(nextX, nextY, nextValue);
+                } else {
+                    nextY= startY+1;
+                    nextX = startX;
+                    if (getCoordValue(nextX, nextY) != 0) {
+                        nextX = startX+1;
+                        nextY = startY;
+                    }
+                    setCoordValue(nextX, nextY, nextValue);
+                }
+            } else if (!insideSquare(nextX, nextY)) {
+                if (nextX < dim) {
+                    nextY = findNextY(nextX, startY);
+                    setCoordValue(nextX, nextY, nextValue);
+                } else if (nextY >= 0) {
+                    nextX = findNextX(startX, nextY);
+                    setCoordValue(nextX, nextY, nextValue);
+                } else {
+                    nextY= startY+1;
+                    nextX = startX;
+                    if (getCoordValue(nextX, nextY) != 0) {
+                        nextX = startX+1;
+                        nextY = startY;
+                    }
+                    setCoordValue(nextX, nextY, nextValue);
+                }
+            }
+            if (nextValue != dim * dim) {
+                fillGaps(nextX, nextY);
+            } else {
+                validate();
+            }
+
+    }
+
+    private int findNextX(int startX, int nextY) {
+        var nextX = 0;
+        while (getCoordValue(nextX, nextY) != 0 && nextX < startX) {
+            nextX++;
+        }
+        return nextX;
+    }
+
+    private int findNextY(int nextX, int startY) {
+        var nextY = dim - 1;
+        while (getCoordValue(nextX, nextY) != 0 && nextY > startY) {
+            nextY--;
+        }
+        return nextY;
+    }
+
+    private boolean insideSquare(int nextX, int nextY) {
+        return nextX < square.length && nextY >= 0;
+    }
+
+    public void writeSquare(PrintStream out) {
+        for (long[] longs : square) {
+            for (int j = 0; j < square.length; j++) {
+                out.print(longs[j]);
+            }
+            out.println();
+        }
     }
 }

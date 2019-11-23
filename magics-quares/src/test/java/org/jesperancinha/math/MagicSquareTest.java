@@ -1,5 +1,6 @@
 package org.jesperancinha.math;
 
+import org.jesperancinha.math.exception.NotMagicNumberException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -9,32 +10,29 @@ public class MagicSquareTest {
 
     @Test
     public void build() {
-        final var square = new int[2][2];
+        final var square = new long[2][2];
         square[0][0] = 1;
         square[1][0] = 1;
         square[0][1] = 1;
         square[1][1] = 1;
 
-        assertAll(() -> MagicSquare.builder()
-                .square(square).build());
+        assertAll(() -> new MagicSquare(square));
     }
 
     @Test
     public void buildNull() {
-        assertThrows(NullPointerException.class, () -> MagicSquare.builder()
-                .build());
+        assertThrows(NullPointerException.class, () -> new MagicSquare(null));
     }
 
     @Test
     public void buildUnevenSquare() {
-        final var square = new int[2][2];
+        final var square = new long[2][2];
         square[0][0] = 2;
         square[1][0] = 1;
         square[0][1] = 1;
         square[1][1] = 1;
 
-        assertThrows(NotMagicNumberException.class, () -> MagicSquare.builder()
-                .square(square).build());
+        assertThrows(NotMagicNumberException.class, () -> new MagicSquare(square));
     }
 
 }

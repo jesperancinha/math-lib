@@ -1,4 +1,4 @@
-package org.jesperancinha.math;
+package org.jesperancinha.math.exception;
 
 public class NotMagicNumberException extends RuntimeException {
 
