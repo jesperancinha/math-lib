@@ -1,6 +1,6 @@
 package org.jesperancinha.math;
 
-import org.jesperancinha.math.exception.NotMagicNumberException;
+import org.jesperancinha.math.exception.NotMagicSquareException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -32,7 +32,7 @@ public class MagicSquareTest {
         square[0][1] = 1;
         square[1][1] = 1;
 
-        assertThrows(NotMagicNumberException.class, () -> new MagicSquare(square));
+        assertThrows(NotMagicSquareException.class, () -> new MagicSquare(square));
     }
 
 }

@@ -2,7 +2,7 @@ package org.jesperancinha.math;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.jesperancinha.math.exception.NotMagicNumberException;
+import org.jesperancinha.math.exception.NotMagicSquareException;
 
 import java.io.PrintStream;
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public class MagicSquare {
         return this.square[y][x];
     }
 
-    private void validate() throws NotMagicNumberException {
+    private void validate() throws NotMagicSquareException {
         long sumRowOne = sum(getRowByIndex(0));
         checkRows(sumRowOne);
         checkColumns(sumRowOne);
@@ -42,7 +42,7 @@ public class MagicSquare {
     private void checkColumns(long sumRowOne) {
         for (int j = 0; j < square.length; j++) {
             if (sum(getColumnByIndex(j)) != sumRowOne) {
-                throw NotMagicNumberException.createByColumn(j);
+                throw NotMagicSquareException.createByColumn(j);
             }
         }
     }
@@ -50,7 +50,7 @@ public class MagicSquare {
     private void checkRows(long sumRowOne) {
         for (int i = 1; i < square.length; i++) {
             if (sum(getRowByIndex(i)) != sumRowOne) {
-                throw NotMagicNumberException.createByRow(i);
+                throw NotMagicSquareException.createByRow(i);
             }
         }
     }
