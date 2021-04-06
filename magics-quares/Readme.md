@@ -12,7 +12,7 @@ I was inspired in making this when reading through the book [Magic Squares and C
 
 -   [Magic Squares and Cubes by William Andrews](https://www.goodreads.com/book/show/43353307-magic-squares-and-cubes?from_search=true&qid=QrzuPCpoc6&rank=1)
 
-## About me 👨🏽‍💻🚀
+## About me 👨🏽‍💻🚀🏳️‍🌈
 
 [![alt text](https://raw.githubusercontent.com/jesperancinha/project-signer/master/project-signer-templates/icons-20/JEOrgLogo-20.png "João Esperancinha Homepage")](http://joaofilipesabinoesperancinha.nl)
 [![Twitter Follow](https://img.shields.io/twitter/follow/joaofse?label=João%20Esperancinha&style=social "Twitter")](https://twitter.com/joaofse)
